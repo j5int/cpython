@@ -83,7 +83,11 @@ class WeakSet(object):
     def add(self, item):
         if self._pending_removals:
             self._commit_removals()
-        self.data.add(ref(item, self._remove))
+        try:
+            self.data.add(ref(item, self._remove))
+        except TypeError:
+            #Can't add to the cache if ref doesn't exist
+            pass
 
     def clear(self):
         if self._pending_removals:
